@@ -6,13 +6,11 @@
 LiquidCrystal_I2C lcd(0x3F,20,4);
 
 char buf [100];
-char shbuf[17];
 volatile byte pos;
 volatile boolean process_it;
 char *token;
 const char delim[2] = "-";
 int i;
-
 int CCU_Params[3];
 
 void applyParams(void);
