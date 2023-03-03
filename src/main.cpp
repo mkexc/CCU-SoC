@@ -11,7 +11,7 @@ volatile boolean process_it;
 char *token;
 const char delim[2] = "-";
 int i;
-int CCU_Params[3];
+int CCU_Params[4];
 
 void applyParams(void);
 
@@ -64,11 +64,11 @@ void loop (void)
 
     token = strtok (buf,delim);
     i=0;
-    while(token != NULL && i < 3){
+    while(token != NULL && i < 4){
       switch (i)
       {
       case 0:
-        Serial.print("Token 1: ");
+        Serial.print("STATUS: ");
         Serial.println(token);
         if(strcmp(token,"1") == 0)
           CCU_Params[i++] = 1;
@@ -76,7 +76,7 @@ void loop (void)
           CCU_Params[i++] = 0;
         break;
       case 1:
-        Serial.print("Token 2: ");
+        Serial.print("MODE: ");
         Serial.println(token);
         if(strcmp(token,"H") == 0)
           CCU_Params[i++] = 1;
@@ -84,11 +84,21 @@ void loop (void)
           CCU_Params[i++] = 0;
         break;
       case 2:
-        Serial.print("Token 3: ");
+        Serial.print("INTENSITY: ");
         Serial.println(token);
         CCU_Params[i] = atoi(token);
-        if (CCU_Params[i] > 5)
-          CCU_Params[i] = 5;
+        if (CCU_Params[i] > 10)
+          CCU_Params[i] = 10;
+        else if (CCU_Params[i] < 0)
+          CCU_Params[i] = 0;
+        i++;
+        break;
+      case 3:
+        Serial.print("FAN SPEED: ");
+        Serial.println(token);
+        CCU_Params[i] = atoi(token);
+        if (CCU_Params[i] > 10)
+          CCU_Params[i] = 10;
         else if (CCU_Params[i] < 0)
           CCU_Params[i] = 0;
         i++;
@@ -115,15 +125,19 @@ void applyParams(){
     lcd.print("OFF");
   }
   lcd.setCursor(0,1);
-  lcd.print("MODE: ");
-  lcd.setCursor(6,1);
+  lcd.print("M: ");
+  lcd.setCursor(3,1);
   if(CCU_Params[1]){
-    lcd.print("HEAT ");
+    lcd.print("H ");
   } else {
-    lcd.print("COLD ");
+    lcd.print("C ");
   }
-  lcd.setCursor(11,1);
-  lcd.print("FAN: ");
-  lcd.setCursor(15,1);
+  lcd.setCursor(5,1);
+  lcd.print("I:");
+  lcd.setCursor(7,1);
   lcd.print(CCU_Params[2]);
+  lcd.setCursor(9,1);
+  lcd.print(" F:");
+  lcd.setCursor(12,1);
+  lcd.print(CCU_Params[3]);
 }
