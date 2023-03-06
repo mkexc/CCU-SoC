@@ -20,6 +20,10 @@ void setup (void)
   Serial.begin (9600);   // debugging
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("CCU Initializing");
+  lcd.setCursor(0,1);
+  lcd.print("Waiting CST...");
 
   // have to send on master in, *slave out*
   pinMode(MISO, OUTPUT);
